@@ -5,7 +5,7 @@ import (
 	"log/slog"
 	"strconv"
 
-	"aoc25/internal"
+	helper "aoc25/internal"
 )
 
 func wrapNumbers(number int) (int, int) {
@@ -32,11 +32,12 @@ func countHardZeros(data []string) int {
 		slog.Debug("Instruction", "index", index, slog.String("instruction", each))
 		var direction = string(each[0])
 		var number, _ = strconv.Atoi(each[1:])
-		if direction == "L" {
+		switch direction {
+		case "L":
 			safeValue -= number
-		} else if direction == "R" {
+		case "R":
 			safeValue += number
-		} else {
+		default:
 			log.Fatal("Invalid Direction")
 		}
 		safeValue, _ = wrapNumbers(safeValue)
