@@ -64,6 +64,8 @@ func countSoftZeros(data []string) int {
 		var number, _ = strconv.Atoi(each[1:])
 		if direction == "L" {
 			// If the safe starts at 0 and we're going left, remove 1 to make up for an off by 1 error
+			// The wrapNumbers() method will add 1 to the loops count, but going from 0 to a negative number
+			// does not pass through 0!
 			if safeValue == 0 {
 				numberOfZeros -= 1
 			}
@@ -72,6 +74,8 @@ func countSoftZeros(data []string) int {
 			safeValue = value
 			numberOfZeros += loops
 			// Additionally if the value lands on 0 at the end, add an additional 1
+			// This is not required in the right direction logic as if you pass from 99 -> 0,
+			// it will be caught in the wrapNumbers() method.
 			if safeValue == 0 {
 				numberOfZeros += 1
 			}
