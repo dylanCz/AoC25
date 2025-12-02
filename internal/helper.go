@@ -16,3 +16,8 @@ func LoadInput(filename string) string {
 func ParseInput(input string) []string {
 	return strings.Split(input, "\n")
 }
+
+func ParseInputByCommas(input string) []string {
+	split := strings.TrimSuffix(input, "\n")
+	return strings.Split(split, ",")
+}

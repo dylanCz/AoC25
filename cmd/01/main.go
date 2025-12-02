@@ -73,7 +73,7 @@ func countSoftZeros(data []string) int {
 			value, loops := wrapNumbers(safeValue)
 			safeValue = value
 			numberOfZeros += loops
-			// Additionally if the value lands on 0 at the end, add an additional 1
+			// Additionally if the value lands on 0, add an additional 1
 			// This is not required in the right direction logic as if you pass from 99 -> 0,
 			// it will be caught in the wrapNumbers() method.
 			if safeValue == 0 {
