@@ -105,9 +105,6 @@ func moreInvalidIds(data []string) int {
 			if slices.ContainsFunc(splitEven(stringNum), allSameStrings) {
 				sumOfInvalids += num
 			}
-			// if calculateDuplicates(num) {
-			// 	sumOfInvalids += num
-			// }
 		}
 	}
 	return sumOfInvalids
@@ -133,8 +130,7 @@ func moreInvalidIdsRemixed(data []string) int {
 		start, _ := strconv.Atoi(strings.Split(each, "-")[0])
 		end, _ := strconv.Atoi(strings.Split(each, "-")[1])
 		for num := start; num <= end; num++ {
-			stringNum := strconv.Itoa(num)
-			if repeatingPatternChecker(stringNum) {
+			if repeatingPatternChecker(strconv.Itoa(num)) {
 				sumOfInvalids += num
 			}
 		}
