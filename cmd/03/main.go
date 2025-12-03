@@ -51,6 +51,9 @@ func findLargest(data string) (int, int) {
 		if num > largest {
 			largest = num
 			index = i
+			if largest == 9 {
+				break
+			}
 		}
 	}
 	return largest, index
