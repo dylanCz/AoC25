@@ -3,6 +3,7 @@ package helper
 import (
 	"os"
 	"strings"
+	"testing"
 )
 
 func LoadInput(filename string) string {
@@ -25,4 +26,12 @@ func ParseInputRemoveNewline(input string) []string {
 func ParseInputByCommas(input string) []string {
 	split := strings.TrimSuffix(input, "\n")
 	return strings.Split(split, ",")
+}
+
+func BenchWrapper[T any](b *testing.B, name string, f func(data T) int, data T) {
+	b.Run(name, func(b *testing.B) {
+		for b.Loop() {
+			f(data)
+		}
+	})
 }

@@ -6,7 +6,7 @@ import (
 	"time"
 )
 
-func checkSurroundingSquares(data []string, irow int, ipos int) bool {
+func checkSurroundingSquares(data []string, irow int, ipos int) int {
 	count := 0
 	indexes := [][]int{
 		{irow - 1, ipos - 1},
@@ -33,6 +33,11 @@ func checkSurroundingSquares(data []string, irow int, ipos int) bool {
 		}
 	}
 
+	return count
+}
+
+func movable(data []string, irow int, ipos int) bool {
+	count := checkSurroundingSquares(data, irow, ipos)
 	if count < 4 {
 		return true
 	}
@@ -43,12 +48,9 @@ func puzzle(data []string) (int, [][]int) {
 	moveableRollCount := 0
 	moveableRollIndexes := [][]int{}
 	for irow, row := range data {
-		if row == "" {
-			continue
-		}
 		for ipos, position := range row {
 			if string(position) == "@" {
-				if checkSurroundingSquares(data, irow, ipos) {
+				if movable(data, irow, ipos) {
 					moveableRollCount += 1
 					moveableRollIndexes = append(moveableRollIndexes, []int{irow, ipos})
 				}
