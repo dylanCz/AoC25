@@ -6,43 +6,6 @@ import (
 	"time"
 )
 
-func concatenateAll(nums ...int) int {
-	var result int = 0
-
-	for _, n := range nums {
-		pow := int(10)
-		for n >= pow {
-			pow *= 10
-		}
-		result = result*pow + n
-	}
-
-	return result
-}
-
-func p1(data []string) int {
-	var voltage int
-	for _, bank := range data {
-		if bank == "" {
-			continue
-		}
-		first := 0
-		second := 0
-		lastDigit := len(bank) - 1
-		for i := 0; i < len(bank); i++ {
-			battery := int(bank[i] - '0')
-			if i != lastDigit && battery > first {
-				first = battery
-				second = 0
-			} else if battery > second {
-				second = battery
-			}
-		}
-		voltage += concatenateAll(first, second)
-	}
-	return voltage
-}
-
 func findLargest(data string) (int, int) {
 	largest := 0
 	index := 0
@@ -67,13 +30,12 @@ func digitsToNumber(nums []int) int {
 	return number
 }
 
-func p2(data []string) int {
+func puzzle(data []string, digits int) int {
 	var totalVoltage int
 	for _, bank := range data {
 		if bank == "" {
 			continue
 		}
-		digits := 12
 		bankVoltage := make([]int, 0, digits)
 		nextIndex := 0
 		for index := range digits {
@@ -90,12 +52,12 @@ func main() {
 	data := helper.ParseInput(helper.LoadInput("input.txt"))
 
 	start := time.Now()
-	slog.Info("AoC Day 3", "Battery Voltages P1", p1(data))
-	p1elapsed := time.Since(start)
-	slog.Info("P1", "time", p1elapsed)
+	slog.Info("AoC Day 3", "Battery Voltages P1", puzzle(data, 2))
+	elapsedv1 := time.Since(start)
+	slog.Info("P1", "time", elapsedv1)
 
 	start = time.Now()
-	slog.Info("AoC Day 3", "Battery Voltages P2", p2(data))
-	p2elapsed := time.Since(start)
-	slog.Info("P2", "time", p2elapsed)
+	slog.Info("AoC Day 3", "Battery Voltages P2", puzzle(data, 12))
+	elapsedv2 := time.Since(start)
+	slog.Info("P2", "time", elapsedv2)
 }
