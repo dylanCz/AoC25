@@ -36,14 +36,15 @@ func puzzle(data []string, digits int) int {
 		if bank == "" {
 			continue
 		}
-		bankVoltage := make([]int, 0, digits)
+		bankVoltage := make([]int, digits)
 		nextIndex := 0
-		for index := range digits {
-			voltage, index := findLargest(bank[nextIndex : len(bank)-(digits-(index+1))])
+		for i := range digits {
+			voltage, index := findLargest(bank[nextIndex : len(bank)-(digits-(i+1))])
 			nextIndex += index + 1
-			bankVoltage = append(bankVoltage, voltage)
+			bankVoltage[i] = voltage
 		}
-		totalVoltage += int(digitsToNumber(bankVoltage))
+
+		totalVoltage += digitsToNumber(bankVoltage)
 	}
 	return totalVoltage
 }
