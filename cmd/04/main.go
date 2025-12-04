@@ -2,7 +2,12 @@ package main
 
 import (
 	helper "aoc25/internal"
+	"fmt"
+	"log"
 	"log/slog"
+	"os"
+
+	"github.com/joho/godotenv"
 )
 
 func checkSurroundingSquares(data []string, irow int, ipos int) int {
@@ -83,6 +88,9 @@ func p2(data []string) int {
 	count, removables := calculateRemovableRolls(data)
 
 	for {
+		if os.Getenv("draw_timelapse") == "true" {
+			printTimelapse(data)
+		}
 		removeRolls(data, removables)
 		oldcount := count
 		newCount, newRemovables := calculateRemovableRolls(data)
@@ -95,8 +103,20 @@ func p2(data []string) int {
 	return count
 }
 
+func printTimelapse(data []string) {
+	fmt.Print("\n")
+	for _, row := range data {
+		fmt.Println(row)
+	}
+}
+
 func main() {
-	data := helper.ParseInputRemoveNewline(helper.LoadInput("input.txt"))
+	err := godotenv.Load()
+	if err != nil {
+		log.Fatal("Error loading .env file")
+	}
+
+	data := helper.ParseInputRemoveNewline(helper.LoadInput(os.Getenv("input_file")))
 	slog.Info("AoC Day 4", "Forklifts P1", p1(data))
 	slog.Info("AoC Day 4", "Forklifts P2", p2(data))
 }
