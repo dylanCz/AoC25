@@ -3,7 +3,6 @@ package main
 import (
 	helper "aoc25/internal"
 	"log/slog"
-	"time"
 )
 
 func checkSurroundingSquares(data []string, irow int, ipos int) int {
@@ -44,7 +43,7 @@ func movable(data []string, irow int, ipos int) bool {
 	return false
 }
 
-func puzzle(data []string) (int, [][]int) {
+func calculateRemovableRolls(data []string) (int, [][]int) {
 	moveableRollCount := 0
 	moveableRollIndexes := [][]int{}
 	for irow, row := range data {
@@ -75,25 +74,29 @@ func removeRolls(data []string, removables [][]int) {
 	}
 }
 
-func main() {
-	data := helper.ParseInputRemoveNewline(helper.LoadInput("input.txt"))
-	start := time.Now()
-	count, removables := puzzle(data)
-	elapsedv1 := time.Since(start)
-	slog.Info("AoC Day 4", "Forklifts P1", count)
-	slog.Info("P1", "time", elapsedv1)
+func p1(data []string) int {
+	count, _ := calculateRemovableRolls(data)
+	return count
+}
 
-	elapsedv2 := time.Since(start)
+func p2(data []string) int {
+	count, removables := calculateRemovableRolls(data)
+
 	for {
 		removeRolls(data, removables)
 		oldcount := count
-		moreCount, moreRemovables := puzzle(data)
-		count += moreCount
+		newCount, newRemovables := calculateRemovableRolls(data)
+		count += newCount
 		if count == oldcount {
 			break
 		}
-		removables = moreRemovables
+		removables = newRemovables
 	}
-	slog.Info("AoC Day 4", "Forklifts P2", count)
-	slog.Info("P1", "time", elapsedv2)
+	return count
+}
+
+func main() {
+	data := helper.ParseInputRemoveNewline(helper.LoadInput("input.txt"))
+	slog.Info("AoC Day 4", "Forklifts P1", p1(data))
+	slog.Info("AoC Day 4", "Forklifts P2", p2(data))
 }
