@@ -35,3 +35,14 @@ func BenchWrapper[T any](b *testing.B, name string, f func(data T) int, data T) 
 		}
 	})
 }
+
+func P5Parse(input string) ([]string, []string) {
+	input = strings.TrimSuffix(input, "\n")
+	result := strings.Split(input, "\n")
+	for i, v := range result {
+		if v == "" {
+			return result[:i], result[i+1:]
+		}
+	}
+	return result, nil
+}
