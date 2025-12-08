@@ -2,6 +2,7 @@ package helper
 
 import (
 	"os"
+	"strconv"
 	"strings"
 	"testing"
 )
@@ -66,4 +67,27 @@ func P6Parse(input string) [][]string {
 		rows = append(rows, nums)
 	}
 	return rows
+}
+
+func P8Parse(input string) [][]int {
+	var coords [][]string
+	removeNewline := strings.TrimSuffix(input, "\n")
+	splitStrings := strings.SplitSeq(removeNewline, "\n")
+	for line := range splitStrings {
+		coords = append(coords, strings.Split(line, ","))
+	}
+
+	var result [][]int
+	for _, row := range coords {
+		nums := make([]int, len(row))
+		for i, s := range row {
+			n, err := strconv.Atoi(s)
+			if err != nil {
+				panic(err)
+			}
+			nums[i] = n
+		}
+		result = append(result, nums)
+	}
+	return result
 }
