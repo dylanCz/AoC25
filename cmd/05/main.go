@@ -10,7 +10,7 @@ import (
 	"github.com/joho/godotenv"
 )
 
-func puzzle(input string) int {
+func p1(input string) int {
 	freshIngredients, ingredients := helper.P5Parse(input)
 	ingredientList := newIngredients(freshIngredients)
 	freshIngredientCount := 0
@@ -35,6 +35,6 @@ func main() {
 		log.Fatal("Error loading .env file")
 	}
 	inputFile := os.Getenv("input_file")
-	slog.Info("AoC Day 5", "Ingredients P1", puzzle(helper.LoadInput(inputFile)))
+	slog.Info("AoC Day 5", "Ingredients P1", p1(helper.LoadInput(inputFile)))
 	slog.Info("AoC Day 5", "Ingredients P2", p2(helper.LoadInput(inputFile)))
 }

@@ -46,3 +46,24 @@ func P5Parse(input string) ([]string, []string) {
 	}
 	return result, nil
 }
+
+func P6Parse(input string) [][]string {
+	var rows [][]string
+
+	for line := range strings.SplitSeq(input, "\n") {
+		line = strings.TrimSpace(line)
+		if line == "" {
+			continue
+		}
+
+		parts := strings.Fields(line)
+
+		var nums []string
+		for _, p := range parts {
+			nums = append(nums, p)
+		}
+
+		rows = append(rows, nums)
+	}
+	return rows
+}

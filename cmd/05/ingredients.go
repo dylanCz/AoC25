@@ -1,7 +1,6 @@
 package main
 
 import (
-	"fmt"
 	"sort"
 	"strconv"
 	"strings"
@@ -56,7 +55,6 @@ func sortRanges(ranges []string) {
 func (self *ingredients) total() int {
 	count := 0
 	sortRanges(self.fresh_ingredients_ranges)
-	ranges := []string{}
 	start := 0
 	end := 0
 	for _, eachRange := range self.fresh_ingredients_ranges {
@@ -76,17 +74,11 @@ func (self *ingredients) total() int {
 		}
 		if nextStart > end {
 			// The range is complete
-			ranges = append(ranges, fmt.Sprintf("%d-%d", start, end))
+			count += end - start + 1
 			start = nextStart
 			end = nextEnd
 		}
 	}
-	ranges = append(ranges, fmt.Sprintf("%d-%d", start, end))
-	for _, eachRange := range ranges {
-		parts := strings.Split(eachRange, "-")
-		start, _ := strconv.Atoi(parts[0])
-		end, _ := strconv.Atoi(parts[1])
-		count += end - start + 1
-	}
+	count += end - start + 1
 	return count
 }
