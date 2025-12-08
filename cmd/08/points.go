@@ -1,16 +1,19 @@
 package main
 
-import "slices"
-
 type point struct {
 	x        int
 	y        int
 	z        int
-	partners []*point
+	partners map[*point]struct{}
 }
 
 func newPoint(data []int) *point {
-	return &point{x: data[0], y: data[1], z: data[2]}
+	return &point{
+		x:        data[0],
+		y:        data[1],
+		z:        data[2],
+		partners: make(map[*point]struct{}),
+	}
 }
 
 func newPointSlice(data [][]int) [][]*point {
@@ -22,8 +25,5 @@ func newPointSlice(data [][]int) [][]*point {
 }
 
 func (self *point) Join(point *point) {
-	if slices.Contains(self.partners, point) {
-		return
-	}
-	self.partners = append(self.partners, point)
+	self.partners[point] = struct{}{}
 }

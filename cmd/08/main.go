@@ -4,8 +4,8 @@ import (
 	helper "aoc25/internal"
 	"fmt"
 	"math"
-	"slices"
 	"sort"
+	"time"
 )
 
 func calculateDistance(point1 *point, point2 *point) float64 {
@@ -62,9 +62,9 @@ func MergePoints(points [][]*point, first, second *point) [][]*point {
 	return points
 }
 
-func p1(data [][]int, iterations int, finalMult int) int {
+func puzzle(data [][]int, iterations int, finalMult int) {
 	pointSlice := newPointSlice(data)
-	for range iterations {
+	for x := range iterations {
 		closestDistance := math.MaxFloat64
 		var pointA *point
 		var pointB *point
@@ -75,7 +75,7 @@ func p1(data [][]int, iterations int, finalMult int) int {
 						if first == second {
 							continue
 						}
-						if slices.Contains(first.partners, second) {
+						if _, exists := first.partners[second]; exists {
 							continue
 						}
 						distance := calculateDistance(first, second)
@@ -89,15 +89,20 @@ func p1(data [][]int, iterations int, finalMult int) int {
 			}
 		}
 		pointSlice = MergePoints(pointSlice, pointA, pointB)
+		if x == 1000 {
+			fmt.Println(findXLargestCircuits(pointSlice, finalMult))
+		}
 		if len(pointSlice) == 1 {
-			return pointA.x * pointB.x
+			fmt.Println(pointA.x * pointB.x)
+			break
 		}
 	}
-	return findXLargestCircuits(pointSlice, finalMult)
 }
 
 func main() {
 	data := helper.P8Parse(helper.LoadInput("input.txt"))
-	fmt.Println(p1(data, 1000, 3))
-	fmt.Println(p1(data, 5000, 3))
+
+	start := time.Now()
+	puzzle(data, 5000, 3)
+	fmt.Println(time.Since(start))
 }
