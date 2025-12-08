@@ -2,28 +2,28 @@ package main
 
 import "slices"
 
-type junction struct {
+type point struct {
 	x        int
 	y        int
 	z        int
-	partners []*junction
+	partners []*point
 }
 
-func newJunction(data []int) *junction {
-	return &junction{x: data[0], y: data[1], z: data[2]}
+func newPoint(data []int) *point {
+	return &point{x: data[0], y: data[1], z: data[2]}
 }
 
-func newJunctionSlice(data [][]int) [][]*junction {
-	junctionSlice := [][]*junction{}
-	for _, eachJunction := range data {
-		junctionSlice = append(junctionSlice, []*junction{newJunction(eachJunction)})
+func newPointSlice(data [][]int) [][]*point {
+	pointSlice := [][]*point{}
+	for _, eachPoint := range data {
+		pointSlice = append(pointSlice, []*point{newPoint(eachPoint)})
 	}
-	return junctionSlice
+	return pointSlice
 }
 
-func (self *junction) Join(junction *junction) {
-	if slices.Contains(self.partners, junction) {
+func (self *point) Join(point *point) {
+	if slices.Contains(self.partners, point) {
 		return
 	}
-	self.partners = append(self.partners, junction)
+	self.partners = append(self.partners, point)
 }

@@ -1,37 +1,39 @@
 package main
 
 import (
+	helper "aoc25/internal"
+	"fmt"
 	"math"
 	"slices"
 	"sort"
 )
 
-func calculateDistance(junction1 *junction, junction2 *junction) float64 {
-	dx := float64(junction1.x - junction2.x)
-	dy := float64(junction1.y - junction2.y)
-	dz := float64(junction1.z - junction2.z)
+func calculateDistance(point1 *point, point2 *point) float64 {
+	dx := float64(point1.x - point2.x)
+	dy := float64(point1.y - point2.y)
+	dz := float64(point1.z - point2.z)
 	return math.Sqrt(dx*dx + dy*dy + dz*dz)
 }
 
-func findXLargestCircuits(circuitsList [][]*junction, numbersOfCircuits int) int {
+func findXLargestCircuits(circuitsList [][]*point, x int) int {
 	total := 1
 	sort.Slice(circuitsList, func(i, j int) bool {
 		return len(circuitsList[i]) > len(circuitsList[j])
 	})
-	for _, circuit := range circuitsList[0:numbersOfCircuits] {
+	for _, circuit := range circuitsList[0:x] {
 		total *= len(circuit)
 	}
 	return total
 }
 
-func MergeJunctions(junctions [][]*junction, first, second *junction) [][]*junction {
+func MergePoints(points [][]*point, first, second *point) [][]*point {
 	var firstIndex, secondIndex = -1, -1
 
 	first.Join(second)
 	second.Join(first)
 
-	for i, junction := range junctions {
-		for _, j := range junction {
+	for i, point := range points {
+		for _, j := range point {
 			if j == first {
 				firstIndex = i
 			}
@@ -43,7 +45,7 @@ func MergeJunctions(junctions [][]*junction, first, second *junction) [][]*junct
 
 	// no merge needed (same group)
 	if firstIndex == secondIndex {
-		return junctions
+		return points
 	}
 
 	// ensure firstIndex < secondIndex to delete safely
@@ -52,24 +54,24 @@ func MergeJunctions(junctions [][]*junction, first, second *junction) [][]*junct
 	}
 
 	// merge second group into first
-	junctions[firstIndex] = append(junctions[firstIndex], junctions[secondIndex]...)
+	points[firstIndex] = append(points[firstIndex], points[secondIndex]...)
 
 	// delete second group
-	junctions = append(junctions[:secondIndex], junctions[secondIndex+1:]...)
+	points = append(points[:secondIndex], points[secondIndex+1:]...)
 
-	return junctions
+	return points
 }
 
 func p1(data [][]int, iterations int, finalMult int) int {
-	junctionSlice := newJunctionSlice(data)
+	pointSlice := newPointSlice(data)
 	for range iterations {
 		closestDistance := math.MaxFloat64
-		var junctionA *junction
-		var junctionB *junction
-		for i := 0; i < len(junctionSlice); i++ {
-			for _, first := range junctionSlice[i] {
-				for j := i; j < len(junctionSlice); j++ {
-					for _, second := range junctionSlice[j] {
+		var pointA *point
+		var pointB *point
+		for i := 0; i < len(pointSlice); i++ {
+			for _, first := range pointSlice[i] {
+				for j := i; j < len(pointSlice); j++ {
+					for _, second := range pointSlice[j] {
 						if first == second {
 							continue
 						}
@@ -79,24 +81,23 @@ func p1(data [][]int, iterations int, finalMult int) int {
 						distance := calculateDistance(first, second)
 						if distance < closestDistance {
 							closestDistance = distance
-							junctionA = first
-							junctionB = second
+							pointA = first
+							pointB = second
 						}
 					}
 				}
 			}
 		}
-		junctionSlice = MergeJunctions(junctionSlice, junctionA, junctionB)
-		if len(junctionSlice) == 1 {
-			return junctionA.x * junctionB.x
+		pointSlice = MergePoints(pointSlice, pointA, pointB)
+		if len(pointSlice) == 1 {
+			return pointA.x * pointB.x
 		}
 	}
-	return findXLargestCircuits(junctionSlice, finalMult)
+	return findXLargestCircuits(pointSlice, finalMult)
 }
 
-// func main() {
-// 	data := helper.P8Parse(helper.LoadInput("input.txt"))
-// 	// fmt.Println(p1(helper.P8Parse(helper.LoadInput("mockinput.txt")), 100, 3))
-// 	fmt.Println(p1(data, 1000, 3))
-// 	fmt.Println(p1(data, 5000, 3))
-// }
+func main() {
+	data := helper.P8Parse(helper.LoadInput("input.txt"))
+	fmt.Println(p1(data, 1000, 3))
+	fmt.Println(p1(data, 5000, 3))
+}
