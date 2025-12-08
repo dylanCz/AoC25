@@ -1,8 +1,6 @@
 package main
 
 import (
-	helper "aoc25/internal"
-	"fmt"
 	"math"
 	"slices"
 	"sort"
@@ -28,6 +26,9 @@ func findXLargestCircuits(circuitsList [][]*junction, numbersOfCircuits int) int
 
 func MergeJunctions(junctions [][]*junction, first, second *junction) [][]*junction {
 	var firstIndex, secondIndex = -1, -1
+
+	first.Join(second)
+	second.Join(first)
 
 	for i, junction := range junctions {
 		for _, j := range junction {
@@ -56,21 +57,18 @@ func MergeJunctions(junctions [][]*junction, first, second *junction) [][]*junct
 	// delete second group
 	junctions = append(junctions[:secondIndex], junctions[secondIndex+1:]...)
 
-	first.Join(second)
-	second.Join(first)
-
 	return junctions
 }
 
 func p1(data [][]int, iterations int, finalMult int) int {
 	junctionSlice := newJunctionSlice(data)
-	for range iterations - 1 {
+	for range iterations {
 		closestDistance := math.MaxFloat64
 		var junctionA *junction
 		var junctionB *junction
 		for i := 0; i < len(junctionSlice); i++ {
 			for _, first := range junctionSlice[i] {
-				for j := 0; j < len(junctionSlice); j++ {
+				for j := i; j < len(junctionSlice); j++ {
 					for _, second := range junctionSlice[j] {
 						if first == second {
 							continue
@@ -88,26 +86,17 @@ func p1(data [][]int, iterations int, finalMult int) int {
 				}
 			}
 		}
-		for _, junc := range junctionSlice {
-			fmt.Println(junc)
-		}
 		junctionSlice = MergeJunctions(junctionSlice, junctionA, junctionB)
-		fmt.Println()
-		for _, junc := range junctionSlice {
-			fmt.Println(junc)
+		if len(junctionSlice) == 1 {
+			return junctionA.x * junctionB.x
 		}
-		fmt.Println()
-		fmt.Println()
-		fmt.Println()
 	}
-
-	fmt.Println(junctionSlice)
-
 	return findXLargestCircuits(junctionSlice, finalMult)
 }
 
-func main() {
-	// data := helper.P8Parse(helper.LoadInput("input.txt"))
-	fmt.Println(p1(helper.P8Parse(helper.LoadInput("mockinput.txt")), 10, 3))
-	// fmt.Println(p1(helper.P8Parse(helper.LoadInput("input.txt")), 1000, 3))
-}
+// func main() {
+// 	data := helper.P8Parse(helper.LoadInput("input.txt"))
+// 	// fmt.Println(p1(helper.P8Parse(helper.LoadInput("mockinput.txt")), 100, 3))
+// 	fmt.Println(p1(data, 1000, 3))
+// 	fmt.Println(p1(data, 5000, 3))
+// }
