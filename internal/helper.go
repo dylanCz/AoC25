@@ -16,7 +16,8 @@ func LoadInput(filename string) string {
 }
 
 func ParseInput(input string) []string {
-	return strings.Split(input, "\n")
+	removeNewline := strings.TrimSuffix(input, "\n")
+	return strings.Split(removeNewline, "\n")
 }
 
 func ParseInputRemoveNewline(input string) []string {
